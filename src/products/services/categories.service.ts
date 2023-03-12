@@ -1,6 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Category } from '../entities/category.entity';
-import { CreateCategoryDTO, UpdateCategoryDTO } from 'src/products/dtos/category.dto';
+import {
+  CreateCategoryDTO,
+  UpdateCategoryDTO,
+} from 'src/products/dtos/category.dto';
 @Injectable()
 export class CategoriesService {
   //manual incremental counter for id generation
