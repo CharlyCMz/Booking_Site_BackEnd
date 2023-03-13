@@ -1,11 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Client } from 'pg';
+
 import { Category } from '../entities/category.entity';
 import {
   CreateCategoryDTO,
   UpdateCategoryDTO,
 } from 'src/products/dtos/category.dto';
+
 @Injectable()
 export class CategoriesService {
+  constructor(@Inject('bookingDB') private pgClient: Client) {}
+
   //manual incremental counter for id generation
   private counter = 3;
   //Memory array of categories to initial interactions
