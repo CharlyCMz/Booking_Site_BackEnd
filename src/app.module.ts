@@ -6,10 +6,18 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { DatabaseModule } from './database/database.module';
 
+import { environment } from './config/environments';
+import config from './config/config';
+
 @Module({
   imports: [
     ProductsModule,
-    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }), //Makes the .env file part of a global module for injection (service.get())
+    ConfigModule.forRoot({
+      envFilePath:
+        environment[process.env.NODE_ENV] || './config/env/.development.env',
+      load: [config],
+      isGlobal: true,
+    }),
     DatabaseModule,
   ],
   controllers: [AppController],
