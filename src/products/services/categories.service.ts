@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class CategoriesService {
-  constructor(@Inject('bookingDB') private pgClient: Client) {}
+  constructor(@Inject('Postgres') private pgClient: Client) {}
 
   //manual incremental counter for id generation
   private counter = 3;

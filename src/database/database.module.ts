@@ -17,10 +17,10 @@ client.connect();
   controllers: [],
   providers: [
     {
-      provide: 'bookingDB',
+      provide: 'Postgres',
       useValue: client,
     },
   ],
-  exports: ['bookingDB'],
+  exports: ['Postgres'],
 })
 export class DatabaseModule {}
