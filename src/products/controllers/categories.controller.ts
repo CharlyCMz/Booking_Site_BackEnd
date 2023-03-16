@@ -9,7 +9,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { CategoriesService } from '../services/categories.service';
-import { CreateCategoryDTO, UpdateCategoryDTO } from 'src/products/dtos/category.dto';
+import {
+  CreateCategoryDTO,
+  UpdateCategoryDTO,
+} from 'src/products/dtos/category.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -34,7 +37,7 @@ export class CategoriesController {
     return this.categoryService.findOne(id);
   }
 
-  //Category modification "Update"
+  // Category modification "Update"
   @Put(':id')
   updateEntity(
     @Param('id', ParseIntPipe) id: number,

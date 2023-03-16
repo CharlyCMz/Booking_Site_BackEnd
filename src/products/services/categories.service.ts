@@ -1,5 +1,6 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { Client } from 'pg';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { Category } from '../entities/category.entity';
 import {
@@ -9,39 +10,17 @@ import {
 
 @Injectable()
 export class CategoriesService {
-  constructor(@Inject('Postgres') private pgClient: Client) {}
+  constructor(
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+  ) {}
 
-  //manual incremental counter for id generation
-  private counter = 3;
-  //Memory array of categories to initial interactions
-  private categories: Category[] = [
-    {
-      id: 1,
-      title: 'Apartments',
-      description: `asdasdasdasd`,
-      image: 'akjsdhakjsdh',
-    },
-    {
-      id: 2,
-      title: 'Hotels',
-      description: `asdasrasdasdasda`,
-      image: 'akjsdhakjsdh',
-    },
-    {
-      id: 3,
-      title: 'Glampings',
-      description: `qfqweffsdfsfasdfasdfasdf`,
-      image: 'akjsdhakjsdh',
-    },
-  ];
-
-  //Manual methods creation to manipulate the memory array
   findAll() {
-    return this.categories;
+    return this.categoryRepository.find();
   }
 
-  findOne(id: number) {
-    const category = this.categories.find((category) => category.id === id);
+  async findOne(id: number) {
+    const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(`The Category with ID: ${id} was Not Found`);
     }
@@ -49,34 +28,27 @@ export class CategoriesService {
   }
 
   createEntity(payload: CreateCategoryDTO) {
-    this.counter += 1;
-    const newCategory: Category = {
-      id: this.counter,
-      ...payload,
-    };
-    this.categories.push(newCategory);
-    return `The category was created with the id ${newCategory.id}`;
+    //Create Method from the Repository builds an instance with the payload data =)
+    const newCategory = this.categoryRepository.create(payload);
+    //But only the Save Method can store it in the DataBase
+    return this.categoryRepository.save(newCategory);
   }
 
-  updateEndity(id: number, payload: UpdateCategoryDTO) {
-    const category = this.findOne(id);
+  async updateEndity(id: number, payload: UpdateCategoryDTO) {
+    const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException(`The Category with ID: ${id} was Not Found`);
     }
-    const index = this.categories.findIndex((category) => category.id === id);
-    this.categories[index] = {
-      ...category,
-      ...payload,
-    };
-    return `Category with ID: ${id} updated successfully`;
+    //Merge Method can combine the differences found
+    this.categoryRepository.merge(category, payload);
+    return this.categoryRepository.save(category);
   }
 
-  deleteEntity(id: number) {
-    const index = this.categories.findIndex((category) => category.id === id);
-    if (!index) {
+  async deleteEntity(id: number) {
+    const exist = await this.categoryRepository.findOneBy({ id });
+    if (!exist) {
       throw new NotFoundException(`The Category with ID: ${id} was Not Found`);
     }
-    this.categories.splice(index, 1);
-    return `Category with ID: ${id} removed successfully`;
+    return this.categoryRepository.delete(id);
   }
 }
