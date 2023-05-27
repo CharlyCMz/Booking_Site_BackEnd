@@ -11,19 +11,6 @@ export class AppService {
   ) {}
 
   getHello(): string {
-    return `Hello World! ... ${this.configFile.database.name}`;
-  }
-
-  getConection() {
-    return new Promise((resolve, reject) => {
-      this.pgClient.query('SELECT * FROM test_table', (err, res) => {
-        if (err) {
-          reject(err);
-          console.log(err);
-        }
-        resolve(res.rows);
-        console.log(res.rows);
-      });
-    });
+    return `Conection Succesfully Established with Booking_Side_BackEnd`;
   }
 }
