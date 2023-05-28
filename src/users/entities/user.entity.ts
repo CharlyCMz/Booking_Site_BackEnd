@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Rol } from './rol.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -25,6 +27,9 @@ export class User {
 
   @Column({ name: 'account_validation', type: 'boolean' })
   accountValidation: boolean;
+
+  @ManyToOne(() => Rol, (rol) => rol.users)
+  rol: Rol;
 
   @CreateDateColumn({
     name: 'created_at',

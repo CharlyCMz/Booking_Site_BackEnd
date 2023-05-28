@@ -4,7 +4,9 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { User } from './user.entity';
 @Entity({ name: 'roles' })
 export class Rol {
   @PrimaryGeneratedColumn()
@@ -12,6 +14,9 @@ export class Rol {
 
   @Column({ name: 'rol_name', type: 'varchar', length: 24, unique: true })
   rolName: string;
+
+  @OneToMany(() => User, (user) => user.rol)
+  users: User[];
 
   @CreateDateColumn({
     name: 'created_at',

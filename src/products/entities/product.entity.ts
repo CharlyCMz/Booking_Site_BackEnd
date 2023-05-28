@@ -4,7 +4,17 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+
+import { Category } from './category.entity';
+import { Image } from './image.entity';
+import { City } from './city.entity';
+import { Policy } from './policy.entity';
+import { Feature } from './feature.entity';
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
@@ -24,6 +34,22 @@ export class Product {
 
   @Column({ type: 'boolean' })
   availability: number;
+
+  @ManyToMany(() => Feature, (feature) => feature.products)
+  @JoinTable()
+  features: Feature[];
+
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
+
+  @ManyToOne(() => City, (city) => city.products)
+  city: City;
+
+  @OneToMany(() => Image, (image) => image.product)
+  images: Image[];
+
+  @OneToMany(() => Policy, (policy) => policy.product)
+  policies: Policy[];
 
   @CreateDateColumn({
     name: 'created_at',

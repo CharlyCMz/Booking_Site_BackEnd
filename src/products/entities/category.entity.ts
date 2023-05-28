@@ -4,7 +4,13 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Image } from './image.entity';
+import { Product } from './product.entity';
 @Entity({ name: 'categories' })
 export class Category {
   @PrimaryGeneratedColumn()
@@ -16,8 +22,12 @@ export class Category {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'varchar' })
-  image: string;
+  @OneToOne(() => Image, { nullable: false })
+  @JoinColumn()
+  image: Image;
+
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
 
   @CreateDateColumn({
     name: 'created_at',

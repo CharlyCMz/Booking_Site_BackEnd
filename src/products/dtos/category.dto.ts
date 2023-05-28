@@ -1,21 +1,21 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsPositive, IsString, IsUrl } from 'class-validator';
 
 export class CreateCategoryDTO {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @ApiProperty()
   readonly title: string;
 
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @ApiProperty()
   readonly description: string;
 
-  @IsUrl()
   @IsNotEmpty()
+  @IsPositive()
   @ApiProperty()
-  readonly image: string;
+  readonly imageId: number;
 }
 
 export class UpdateCategoryDTO extends PartialType(CreateCategoryDTO) {}

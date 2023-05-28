@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Product } from './product.entity';
+import { PolicyType } from './policyType.entity';
 
 @Entity({ name: 'policies' })
 export class Policy {
@@ -13,6 +16,12 @@ export class Policy {
 
   @Column({ type: 'varchar', length: 64 })
   name: string;
+
+  @ManyToOne(() => Product, (product) => product.policies)
+  product: Product;
+
+  @ManyToOne(() => PolicyType, (policyType) => policyType.policies)
+  policyType: PolicyType;
 
   @CreateDateColumn({
     name: 'created_at',
