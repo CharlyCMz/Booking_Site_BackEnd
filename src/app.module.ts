@@ -12,7 +12,6 @@ import config from './config';
 
 @Module({
   imports: [
-    ProductsModule,
     ConfigModule.forRoot({
       envFilePath: environments[process.env.NODE_ENV] || '.env',
       load: [config],
@@ -26,6 +25,7 @@ import config from './config';
       }),
     }),
     DatabaseModule,
+    ProductsModule,
     UsersModule,
   ],
   controllers: [AppController],
