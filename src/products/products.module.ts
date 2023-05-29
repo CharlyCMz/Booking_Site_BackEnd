@@ -16,6 +16,12 @@ import { ImageController } from './controllers/image.controller';
 import { PolicyController } from './controllers/policy.controller';
 import { PolicyTypeController } from './controllers/policy-type.controller';
 import { ProductController } from './controllers/product.controller';
+import { CityService } from './services/city.service';
+import { FeatureService } from './services/feature.service';
+import { ImageService } from './services/image.service';
+import { PolicyService } from './services/policy.service';
+import { PolicyTypeService } from './services/policy-type.service';
+import { ProductService } from './services/product.service';
 
 @Module({
   imports: [
@@ -30,6 +36,6 @@ import { ProductController } from './controllers/product.controller';
     ]),
   ],
   controllers: [CategoryController, CityController, FeatureController, ImageController, PolicyController, PolicyTypeController, ProductController],
-  providers: [CategoryService],
+  providers: [CategoryService, CityService, FeatureService, ImageService, PolicyService, PolicyTypeService, ProductService],
 })
 export class ProductsModule {}
