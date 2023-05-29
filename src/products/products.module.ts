@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { CategoriesController } from './controllers/categories.controller';
-import { CategoriesService } from './services/categories.service';
+import { CategoryController } from './controllers/category.controller';
+import { CategoryService } from './services/category.service';
 import { Category } from './entities/category.entity';
 import { City } from './entities/city.entity';
 import { Feature } from './entities/feature.entity';
@@ -10,12 +10,12 @@ import { Image } from './entities/image.entity';
 import { Policy } from './entities/policy.entity';
 import { PolicyType } from './entities/policyType.entity';
 import { Product } from './entities/product.entity';
-import { CitiesController } from './controllers/cities.controller';
-import { FeaturesController } from './controllers/features.controller';
-import { ImagesController } from './controllers/images.controller';
-import { PoliciesController } from './controllers/policies.controller';
-import { PolicyTypesController } from './controllers/policy-types.controller';
-import { ProductsController } from './controllers/products.controller';
+import { CityController } from './controllers/city.controller';
+import { FeatureController } from './controllers/feature.controller';
+import { ImageController } from './controllers/image.controller';
+import { PolicyController } from './controllers/policy.controller';
+import { PolicyTypeController } from './controllers/policy-type.controller';
+import { ProductController } from './controllers/product.controller';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { ProductsController } from './controllers/products.controller';
       Product,
     ]),
   ],
-  controllers: [CategoriesController, CitiesController, FeaturesController, ImagesController, PoliciesController, PolicyTypesController, ProductsController],
-  providers: [CategoriesService],
+  controllers: [CategoryController, CityController, FeatureController, ImageController, PolicyController, PolicyTypeController, ProductController],
+  providers: [CategoryService],
 })
 export class ProductsModule {}

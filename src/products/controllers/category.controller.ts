@@ -8,16 +8,16 @@ import {
   Put,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CategoriesService } from '../services/categories.service';
+import { CategoryService } from '../services/category.service';
 import {
   CreateCategoryDTO,
   UpdateCategoryDTO,
 } from 'src/products/dtos/category.dto';
 
-@Controller('categories')
-export class CategoriesController {
+@Controller('category')
+export class CategoryController {
   //Injection of Service
-  constructor(private categoryService: CategoriesService) {}
+  constructor(private categoryService: CategoryService) {}
 
   //Category addition "Create"
   @Post()

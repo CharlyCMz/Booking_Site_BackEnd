@@ -9,7 +9,7 @@ import {
 } from 'src/products/dtos/category.dto';
 
 @Injectable()
-export class CategoriesService {
+export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
