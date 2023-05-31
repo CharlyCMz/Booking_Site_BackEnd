@@ -33,7 +33,7 @@ export class Product {
   score: number;
 
   @Column({ type: 'boolean' })
-  availability: number;
+  availability: boolean;
 
   @ManyToMany(() => Feature, (feature) => feature.products)
   @JoinTable()
