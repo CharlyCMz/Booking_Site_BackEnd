@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
-export class CreateCategoryDTO {
+export class CreateProductDTO {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
@@ -28,4 +28,4 @@ export class CreateCategoryDTO {
   readonly availability: boolean;
 }
 
-export class UpdateCategoryDTO extends PartialType(CreateCategoryDTO) {}
+export class UpdateProductDTO extends PartialType(CreateProductDTO) {}
