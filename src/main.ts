@@ -19,5 +19,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
   await app.listen(3000);
+  // TODO: Make the port an environmental variable
+  console.log(`Booking_Site_Backend is running on port:3000`);
 }
 bootstrap();

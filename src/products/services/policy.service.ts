@@ -12,11 +12,17 @@ export class PolicyService {
   ) {}
 
   findAll() {
-    return this.policyRepository.find();
+    return this.policyRepository.find({
+      relations: ['policyType'],
+    });
   }
 
   async findOne(id: number) {
-    const policy = await this.policyRepository.findOneBy({ id });
+    const policy = await this.policyRepository
+      .createQueryBuilder('policy')
+      .leftJoinAndSelect('policy.policyType', 'policyType')
+      .where('policy.id = :id', { id })
+      .getOne();
     if (!policy) {
       throw new NotFoundException(`The Policy with ID: ${id} was Not Found`);
     }

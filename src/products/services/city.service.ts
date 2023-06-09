@@ -12,11 +12,17 @@ export class CityService {
   ) {}
 
   findAll() {
-    return this.cityRepository.find();
+    return this.cityRepository.find({
+      relations: ['products'],
+    });
   }
 
   async findOne(id: number) {
-    const city = await this.cityRepository.findOneBy({ id });
+    const city = await this.cityRepository
+      .createQueryBuilder('city')
+      .leftJoinAndSelect('city.products', 'product')
+      .where('city.id = :id', { id })
+      .getOne();
     if (!city) {
       throw new NotFoundException(`The City with ID: ${id} was Not Found`);
     }
