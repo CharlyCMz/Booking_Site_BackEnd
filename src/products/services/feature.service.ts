@@ -23,6 +23,13 @@ export class FeatureService {
     return feature;
   }
 
+  async filterByIds(list: number[]): Promise<Feature[]> {
+    return await this.featureRepository
+      .createQueryBuilder('feature')
+      .where('feature.id IN (:...list)', { list })
+      .getMany();
+  }
+
   createEntity(payload: CreateFeatureDTO) {
     //Create Method from the Repository builds an instance with the payload data =)
     const newFeature = this.featureRepository.create(payload);

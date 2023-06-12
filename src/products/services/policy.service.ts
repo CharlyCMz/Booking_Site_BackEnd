@@ -29,6 +29,13 @@ export class PolicyService {
     return policy;
   }
 
+  async filterByIds(list: number[]): Promise<Policy[]> {
+    return await this.policyRepository
+      .createQueryBuilder('policy')
+      .where('policy.id IN (:...list)', { list })
+      .getMany();
+  }
+
   createEntity(payload: CreatePolicyDTO) {
     //Create Method from the Repository builds an instance with the payload data =)
     const newPolicy = this.policyRepository.create(payload);

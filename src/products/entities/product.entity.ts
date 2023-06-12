@@ -48,7 +48,8 @@ export class Product {
   @OneToMany(() => Image, (image) => image.product)
   images: Image[];
 
-  @OneToMany(() => Policy, (policy) => policy.product)
+  @ManyToMany(() => Policy, (policy) => policy.products)
+  @JoinTable()
   policies: Policy[];
 
   @CreateDateColumn({
@@ -64,4 +65,5 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+  newProduct: Promise<Feature[]>;
 }

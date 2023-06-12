@@ -24,7 +24,7 @@ export class CreateUserDTO {
 
   @IsBoolean()
   @ApiProperty()
-  accountValidation: boolean;
+  readonly accountValidation: boolean;
 
   @IsNotEmpty()
   @IsPositive()

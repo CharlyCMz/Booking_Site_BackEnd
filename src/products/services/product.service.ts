@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { CreateProductDTO, UpdateProductDTO } from '../dtos/product.dto';
 import { CategoryService } from './category.service';
 import { CityService } from './city.service';
+import { FeatureService } from './feature.service';
+import { PolicyService } from './policy.service';
 
 @Injectable()
 export class ProductService {
@@ -13,11 +15,13 @@ export class ProductService {
     private productRepository: Repository<Product>,
     private categoryService: CategoryService,
     private cityService: CityService,
+    private featureService: FeatureService,
+    private policyService: PolicyService,
   ) {}
 
   findAll() {
     return this.productRepository.find({
-      relations: ['city', 'category', 'images', 'policies'],
+      relations: ['city', 'category', 'images', 'policies', 'features'],
     });
   }
 
@@ -28,6 +32,7 @@ export class ProductService {
       .leftJoinAndSelect('product.images', 'image')
       .leftJoinAndSelect('product.city', 'city')
       .leftJoinAndSelect('product.policies', 'policy')
+      .leftJoinAndSelect('product.features', 'feature')
       .where('product.id = :id', { id })
       .getOne();
     if (!product) {
@@ -42,6 +47,10 @@ export class ProductService {
     newProduct.category = category;
     const city = await this.cityService.findOne(payload.cityId);
     newProduct.city = city;
+    const features = await this.featureService.filterByIds(payload.featureIds);
+    newProduct.features = features;
+    const policies = await this.policyService.filterByIds(payload.policyIds);
+    newProduct.policies = policies;
     return this.productRepository.save(newProduct);
   }
 
@@ -57,6 +66,16 @@ export class ProductService {
     if (payload.cityId) {
       const city = await this.cityService.findOne(payload.cityId);
       product.city = city;
+    }
+    if (payload.featureIds) {
+      const features = await this.featureService.filterByIds(
+        payload.featureIds,
+      );
+      product.features = features;
+    }
+    if (payload.policyIds) {
+      const policies = await this.policyService.filterByIds(payload.policyIds);
+      product.policies = policies;
     }
     //Merge Method can combine the differences found
     this.productRepository.merge(product, payload);

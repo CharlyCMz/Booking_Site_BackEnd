@@ -12,11 +12,17 @@ export class RolService {
   ) {}
 
   findAll() {
-    return this.rolRepository.find();
+    return this.rolRepository.find({
+      relations: ['users'],
+    });
   }
 
   async findOne(id: number) {
-    const rol = await this.rolRepository.findOneBy({ id });
+    const rol = await this.rolRepository
+      .createQueryBuilder('rol')
+      .leftJoinAndSelect('rol.users', 'user')
+      .where('rol.id = :id', { id })
+      .getOne();
     if (!rol) {
       throw new NotFoundException(`The Rol with ID: ${id} was Not Found`);
     }

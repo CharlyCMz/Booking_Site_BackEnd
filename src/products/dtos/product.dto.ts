@@ -1,5 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
+  IsArray,
   IsBoolean,
   IsInt,
   IsNotEmpty,
@@ -46,6 +47,16 @@ export class CreateProductDTO {
   @IsPositive()
   @ApiProperty()
   readonly cityId: number;
+
+  @IsArray()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly featureIds: number[];
+
+  @IsArray()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly policyIds: number[];
 }
 
 export class UpdateProductDTO extends PartialType(CreateProductDTO) {}

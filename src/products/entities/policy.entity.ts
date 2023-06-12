@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  ManyToMany,
 } from 'typeorm';
 import { Product } from './product.entity';
 import { PolicyType } from './policyType.entity';
@@ -17,8 +18,8 @@ export class Policy {
   @Column({ type: 'varchar', length: 64 })
   name: string;
 
-  @ManyToOne(() => Product, (product) => product.policies)
-  product: Product;
+  @ManyToMany(() => Product, (product) => product.policies)
+  products: Product[];
 
   @ManyToOne(() => PolicyType, (policyType) => policyType.policies)
   policyType: PolicyType;
