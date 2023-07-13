@@ -7,12 +7,9 @@ import {
   Post,
   Put,
   ParseIntPipe,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { ProductService } from '../services/product.service';
 import { CreateProductDTO, UpdateProductDTO } from '../dtos/product.dto';
-import { QueryFailedError } from 'typeorm';
 
 @Controller('product')
 export class ProductController {
@@ -35,6 +32,12 @@ export class ProductController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productService.findOne(id);
+  }
+
+  //Random products endpoint for the landing page
+  @Get('rand')
+  randomProduct() {
+    return this.productService.randomProduct();
   }
 
   // Category modification "Update"

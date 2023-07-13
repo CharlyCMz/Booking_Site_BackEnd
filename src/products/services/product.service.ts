@@ -46,6 +46,14 @@ export class ProductService {
     return product;
   }
 
+  async randomProduct() {
+    return await this.productRepository
+      .createQueryBuilder('product')
+      .orderBy('RANDOM()')
+      .take(6)
+      .getMany();
+  }
+
   async createEntity(payload: CreateProductDTO) {
     try {
       const newProduct = await this.productRepository.create(payload);
