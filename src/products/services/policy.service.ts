@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Policy } from '../entities/policy.entity';
 import { Repository } from 'typeorm';
 import { CreatePolicyDTO, UpdatePolicyDTO } from '../dtos/policy.dto';
+import { PolicyTypeService } from './policy-type.service';
 
 @Injectable()
 export class PolicyService {
   constructor(
     @InjectRepository(Policy)
     private policyRepository: Repository<Policy>,
+    private policyTypeService: PolicyTypeService,
   ) {}
 
   findAll() {
@@ -36,9 +38,13 @@ export class PolicyService {
       .getMany();
   }
 
-  createEntity(payload: CreatePolicyDTO) {
+  async createEntity(payload: CreatePolicyDTO) {
     //Create Method from the Repository builds an instance with the payload data =)
-    const newPolicy = this.policyRepository.create(payload);
+    const newPolicy = await this.policyRepository.create(payload);
+    const policyType = await this.policyTypeService.findOne(
+      payload.policyTypeId,
+    );
+    newPolicy.policyType = policyType;
     //But only the Save Method can store it in the DataBase
     return this.policyRepository.save(newPolicy);
   }

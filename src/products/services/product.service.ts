@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from '../entities/product.entity';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { CreateProductDTO, UpdateProductDTO } from '../dtos/product.dto';
 import { CategoryService } from './category.service';
 import { CityService } from './city.service';
@@ -42,16 +47,30 @@ export class ProductService {
   }
 
   async createEntity(payload: CreateProductDTO) {
-    const newProduct = this.productRepository.create(payload);
-    const category = await this.categoryService.findOne(payload.categoryId);
-    newProduct.category = category;
-    const city = await this.cityService.findOne(payload.cityId);
-    newProduct.city = city;
-    const features = await this.featureService.filterByIds(payload.featureIds);
-    newProduct.features = features;
-    const policies = await this.policyService.filterByIds(payload.policyIds);
-    newProduct.policies = policies;
-    return this.productRepository.save(newProduct);
+    try {
+      const newProduct = await this.productRepository.create(payload);
+      const category = await this.categoryService.findOne(payload.categoryId);
+      newProduct.category = category;
+      const city = await this.cityService.findOne(payload.cityId);
+      newProduct.city = city;
+      const features = await this.featureService.filterByIds(
+        payload.featureIds,
+      );
+      newProduct.features = features;
+      const policies = await this.policyService.filterByIds(payload.policyIds);
+      newProduct.policies = policies;
+      return await this.productRepository.save(newProduct);
+    } catch (error) {
+      console.log(error.driverError);
+      if (error instanceof QueryFailedError) {
+        //error.driverError === '23505'
+        throw new HttpException(
+          'Product name already in use',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      throw error;
+    }
   }
 
   async updateEndity(id: number, payload: UpdateProductDTO) {

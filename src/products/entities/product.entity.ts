@@ -8,6 +8,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  Unique,
 } from 'typeorm';
 
 import { Category } from './category.entity';
@@ -16,6 +17,7 @@ import { City } from './city.entity';
 import { Policy } from './policy.entity';
 import { Feature } from './feature.entity';
 @Entity({ name: 'products' })
+@Unique(['name'])
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
@@ -65,5 +67,4 @@ export class Product {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
-  newProduct: Promise<Feature[]>;
 }

@@ -5,7 +5,7 @@ export class CreatePolicyDTO {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  readonly name: string;
+  readonly description: string;
 
   @IsNotEmpty()
   @IsNumber()
