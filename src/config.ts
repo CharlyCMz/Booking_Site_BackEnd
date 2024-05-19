@@ -9,5 +9,8 @@ export default registerAs('config', () => {
       port: parseInt(process.env.POSTGRES_PORT),
       host: process.env.POSTGRES_HOST,
     },
+    app: {
+      port: parseInt(process.env.PORT),
+    },
   };
 });
