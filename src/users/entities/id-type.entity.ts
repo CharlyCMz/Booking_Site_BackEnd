@@ -3,35 +3,25 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Rol } from './rol.entity';
 import { Person } from './person.entity';
 
-@Entity({ name: 'users' })
-export class User {
+@Entity({ name: 'identification_types' })
+export class IdType {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 24 })
-  username: string;
+  @Column({ type: 'varchar', length: 10 })
+  code: string;
 
-  @Column({ type: 'varchar', unique: true })
-  password: string;
+  @Column({ type: 'varchar', length: 10 })
+  name: string;
 
-  @Column({ name: 'account_validation', type: 'boolean' })
-  accountValidation: boolean;
-
-  @OneToOne(() => Person, { nullable: false })
-  @JoinColumn()
-  person: Person;
-
-  @ManyToOne(() => Rol, (rol) => rol.users)
-  rol: Rol;
+  @OneToMany(() => Person, (person) => person.idType)
+  persons: Person[];
 
   @CreateDateColumn({
     name: 'created_at',

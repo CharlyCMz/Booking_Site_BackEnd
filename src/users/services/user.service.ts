@@ -38,7 +38,7 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  async updateEndity(id: number, payload: UpdateUserDTO) {
+  async updateEndity(id: string, payload: UpdateUserDTO) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`The User with ID: ${id} was Not Found`);
@@ -52,7 +52,7 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async deleteEntity(id: number) {
+  async deleteEntity(id: string) {
     const exist = await this.userRepository.findOneBy({ id });
     if (!exist) {
       throw new NotFoundException(`The Rol with ID: ${id} was Not Found`);

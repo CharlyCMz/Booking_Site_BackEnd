@@ -36,16 +36,13 @@ export class UserController {
 
   // Category modification "Update"
   @Put(':id')
-  updateEntity(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateUserDTO,
-  ) {
+  updateEntity(@Param('id') id: string, @Body() payload: UpdateUserDTO) {
     return this.userService.updateEndity(id, payload);
   }
 
   //Category Elimination "Delete"
   @Delete(':id')
-  deleteEntity(@Param('id', ParseIntPipe) id: number) {
+  deleteEntity(@Param('id') id: string) {
     return this.userService.deleteEntity(id);
   }
 }
