@@ -35,7 +35,23 @@ import { ProductService } from './services/product.service';
       Product,
     ]),
   ],
-  controllers: [CategoryController, CityController, FeatureController, ImageController, PolicyController, PolicyTypeController, ProductController],
-  providers: [CategoryService, CityService, FeatureService, ImageService, PolicyService, PolicyTypeService, ProductService],
+  controllers: [
+    CategoryController,
+    CityController,
+    FeatureController,
+    ImageController,
+    PolicyController,
+    PolicyTypeController,
+    ProductController,
+  ],
+  providers: [
+    CategoryService,
+    CityService,
+    FeatureService,
+    ImageService,
+    PolicyService,
+    PolicyTypeService,
+    ProductService,
+  ],
 })
 export class ProductsModule {}
