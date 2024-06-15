@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDTO, UpdateUserDTO } from '../dtos/user.dto';
 import { RolService } from './rol.service';
+import { PersonService } from './person.service';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private rolService: RolService,
+    private personService: PersonService,
   ) {}
 
   findAll() {
@@ -19,11 +21,15 @@ export class UserService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.rol', 'rol')
-      .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.person', 'person')
+      .leftJoinAndSelect('person.idType', 'idType')
+      .leftJoinAndSelect('person.address', 'address')
+      .leftJoinAndSelect('address.location', 'location')
+      .where('user.id like :id', { id })
       .getOne();
     if (!user) {
       throw new NotFoundException(`The User with ID: ${id} was Not Found`);
@@ -31,10 +37,12 @@ export class UserService {
     return user;
   }
 
+  //TODO: Find User by document
+
   async createEntity(payload: CreateUserDTO) {
     const newUser = this.userRepository.create(payload);
-    const rol = await this.rolService.findOne(payload.rolId);
-    newUser.rol = rol;
+    newUser.rol = await this.rolService.findOne(payload.rolId);
+    newUser.person = await this.personService.findOne(payload.personId);
     return this.userRepository.save(newUser);
   }
 
@@ -44,10 +52,11 @@ export class UserService {
       throw new NotFoundException(`The User with ID: ${id} was Not Found`);
     }
     if (payload.rolId) {
-      const rol = await this.rolService.findOne(payload.rolId);
-      user.rol = rol;
+      user.rol = await this.rolService.findOne(payload.rolId);
     }
-    //Merge Method can combine the differences found
+    if (payload.personId) {
+      user.person = await this.personService.findOne(payload.personId);
+    }
     this.userRepository.merge(user, payload);
     return this.userRepository.save(user);
   }
@@ -55,7 +64,7 @@ export class UserService {
   async deleteEntity(id: string) {
     const exist = await this.userRepository.findOneBy({ id });
     if (!exist) {
-      throw new NotFoundException(`The Rol with ID: ${id} was Not Found`);
+      throw new NotFoundException(`The User with ID: ${id} was Not Found`);
     }
     return this.userRepository.delete(id);
   }

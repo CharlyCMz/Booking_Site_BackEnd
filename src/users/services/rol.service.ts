@@ -20,7 +20,7 @@ export class RolService {
   async findOne(id: number) {
     const rol = await this.rolRepository
       .createQueryBuilder('rol')
-      .leftJoinAndSelect('rol.users', 'user')
+      .leftJoinAndSelect('rol.users', 'users')
       .where('rol.id = :id', { id })
       .getOne();
     if (!rol) {
@@ -39,7 +39,6 @@ export class RolService {
     if (!rol) {
       throw new NotFoundException(`The Rol with ID: ${id} was Not Found`);
     }
-    //Merge Method can combine the differences found
     this.rolRepository.merge(rol, payload);
     return this.rolRepository.save(rol);
   }
