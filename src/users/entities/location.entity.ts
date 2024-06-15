@@ -17,8 +17,14 @@ export class Location {
   @Column({ name: 'country_code', type: 'varchar', length: 4 })
   countryCode: string;
 
+  @Column({ name: 'country_name', type: 'varchar', length: 48 })
+  countryName: string;
+
   @Column({ name: 'state_code', type: 'varchar', length: 4 })
   stateCode: string;
+
+  @Column({ name: 'state_name', type: 'varchar', length: 4 })
+  stateName: string;
 
   @Column({ name: 'city_code', type: 'varchar', length: 8 })
   cityCode: string;
